@@ -73,4 +73,18 @@ public class TimesheetControllerTests {
         assertThat(timesheetResponseEntity.getBody()).isEqualTo(timesheetFound);
     }
 
+    @Test
+    public void testFindTimesheet_notFound() {
+        doReturn(Optional.empty())
+                .when(repository)
+                .findById(1L);
+
+        ResponseEntity<Timesheet> timesheetResponseEntity =
+                controller.findById(1L);
+
+        verify(repository)
+                .findById(1L);
+
+        assertThat(timesheetResponseEntity.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND);
+    }
 }

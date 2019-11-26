@@ -65,6 +65,15 @@ public class TrackerApplicationTests {
         assertThat(timesheetResponseEntity.getBody()).isEqualTo(timesheetCreated);
     }
 
+    @Test
+    public void testFindTimesheet_notFound() {
+        ResponseEntity<Timesheet> timesheetResponseEntity =
+                restTemplate.getForEntity("/timesheets/0",
+                        Timesheet.class);
+
+        assertThat(timesheetResponseEntity.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND);
+    }
+
     private Timesheet createTimesheet(Timesheet timesheetToCreate) {
         return restTemplate
                 .postForEntity("/timesheets", timesheetToCreate, Timesheet.class)

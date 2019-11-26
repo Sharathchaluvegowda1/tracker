@@ -23,6 +23,11 @@ public class TimesheetController {
 
     @GetMapping("/{id}")
     public ResponseEntity<Timesheet> findById(@PathVariable long id) {
-        return ResponseEntity.ok(repository.findById(id).get());
+        Optional<Timesheet> timesheetFound = repository.findById(id);
+
+        if (timesheetFound.isPresent())
+            return ResponseEntity.ok(timesheetFound.get());
+        else
+            return ResponseEntity.notFound().build();
     }
 }
