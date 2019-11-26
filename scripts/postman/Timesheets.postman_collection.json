@@ -1,0 +1,301 @@
+{
+	"info": {
+		"_postman_id": "ea60e98f-6e5b-477b-9e70-dc0df5548237",
+		"name": "Timesheets",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Create Timesheet",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "1a47c768-8e9a-42be-abd3-7d767f38b3ba",
+						"exec": [
+							"var jsonData = pm.response.json();",
+							"pm.globals.set(\"timesheet-id\", jsonData.id);",
+							"pm.test(\"Status code is 201\", function () {",
+							"    pm.response.to.have.status(201);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"userId\": 1,\n\t\"projectId\": 2,\n\t\"date\": \"2019-09-04\",\n\t\"hours\": 10\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{timesheets-host}}/timesheets",
+					"host": [
+						"{{timesheets-host}}"
+					],
+					"path": [
+						"timesheets"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Find Timesheet by Id",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "300a63ac-64be-442b-8105-fae4b5bc3db4",
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"url": {
+					"raw": "{{timesheets-host}}/timesheets/{{timesheet-id}}",
+					"host": [
+						"{{timesheets-host}}"
+					],
+					"path": [
+						"timesheets",
+						"{{timesheet-id}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Find a Nonexistent Timesheet",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "300a63ac-64be-442b-8105-fae4b5bc3db4",
+						"exec": [
+							"pm.test(\"Status code is 404\", function () {",
+							"    pm.response.to.have.status(404);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"url": {
+					"raw": "{{timesheets-host}}/timesheets/0",
+					"host": [
+						"{{timesheets-host}}"
+					],
+					"path": [
+						"timesheets",
+						"0"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update Timesheet by Id",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "300a63ac-64be-442b-8105-fae4b5bc3db4",
+						"exec": [
+							"pm.test(\"Status code is 204\", function () {",
+							"    pm.response.to.have.status(204);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"projectId\": 2,\n    \"userId\": 1,\n    \"date\": \"2019-09-04\",\n    \"hours\": 11\n}"
+				},
+				"url": {
+					"raw": "{{timesheets-host}}/timesheets/{{timesheet-id}}",
+					"host": [
+						"{{timesheets-host}}"
+					],
+					"path": [
+						"timesheets",
+						"{{timesheet-id}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update a Nonexistent Timesheet",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "300a63ac-64be-442b-8105-fae4b5bc3db4",
+						"exec": [
+							"pm.test(\"Status code is 404\", function () {",
+							"    pm.response.to.have.status(404);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"projectId\": 2,\n    \"userId\": 1,\n    \"date\": \"2019-09-04\",\n    \"hours\": 11\n}"
+				},
+				"url": {
+					"raw": "{{timesheets-host}}/timesheets/0",
+					"host": [
+						"{{timesheets-host}}"
+					],
+					"path": [
+						"timesheets",
+						"0"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete Timesheet by Id",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "300a63ac-64be-442b-8105-fae4b5bc3db4",
+						"exec": [
+							"pm.test(\"Status code is 204\", function () {",
+							"    pm.response.to.have.status(204);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"url": {
+					"raw": "{{timesheets-host}}/timesheets/{{timesheet-id}}",
+					"host": [
+						"{{timesheets-host}}"
+					],
+					"path": [
+						"timesheets",
+						"{{timesheet-id}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Find Deleted Timesheet",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "300a63ac-64be-442b-8105-fae4b5bc3db4",
+						"exec": [
+							"pm.test(\"Status code is 404\", function () {",
+							"    pm.response.to.have.status(404);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"url": {
+					"raw": "{{timesheets-host}}/timesheets/{{timesheet-id}}",
+					"host": [
+						"{{timesheets-host}}"
+					],
+					"path": [
+						"timesheets",
+						"{{timesheet-id}}"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"protocolProfileBehavior": {}
+}

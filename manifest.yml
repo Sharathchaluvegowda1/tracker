@@ -1,0 +1,18 @@
+---
+applications:
+  - name: tracker
+    path: build/libs/tracker-1.0.0.jar
+    instances: 1
+    memory: 512M
+    disk_quota: 512M
+    health-check-type: port
+    random-route: true
+    ## If you want to set a named route
+    ## Find a unique route through use of
+    ## `check-route` and `domains` cf commands
+    # routes:
+    #   - route: tracker-{initials}.{domain}
+    services:
+      - tracker-database
+    env:
+      JBP_CONFIG_OPEN_JDK_JRE: '{ jre: { version: 11.+ }, memory_calculator: { stack_threads: 25 } }'

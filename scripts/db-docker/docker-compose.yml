@@ -1,0 +1,29 @@
+version: '3'
+
+services:
+  tracker-database:
+    image: mysql:latest
+    container_name: tracker-database
+    environment:
+      MYSQL_USER: root
+      MYSQL_ROOT_PASSWORD: password
+    networks:
+      - tracker-network
+    expose:
+      - '3306'
+    ports:
+      - '3306:3306'
+
+  tracker-database-create:
+    image: mysql:latest
+    container_name: tracker-database-create
+    command: bash /db/create-local-database.sh
+    volumes:
+      - "./:/db"
+    networks:
+      - tracker-network
+    depends_on:
+      - tracker-database
+
+networks:
+  tracker-network:
