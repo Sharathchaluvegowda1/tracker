@@ -46,4 +46,28 @@ public class TrackerApplicationTests {
         assertThat(timesheetSaved.getHours()).isEqualTo(timesheetToCreate.getHours());
     }
 
+    @Test
+    public void testFindTimesheet() {
+        Timesheet timesheetCreated = createTimesheet(
+                new Timesheet(
+                        22L,
+                        33L,
+                        LocalDate.of(2019,11,28),
+                        6
+                )
+        );
+
+        ResponseEntity<Timesheet> timesheetResponseEntity =
+                restTemplate.getForEntity("/timesheets/" + timesheetCreated.getId(),
+                        Timesheet.class);
+
+        assertThat(timesheetResponseEntity.getStatusCode()).isEqualTo(HttpStatus.OK);
+        assertThat(timesheetResponseEntity.getBody()).isEqualTo(timesheetCreated);
+    }
+
+    private Timesheet createTimesheet(Timesheet timesheetToCreate) {
+        return restTemplate
+                .postForEntity("/timesheets", timesheetToCreate, Timesheet.class)
+                .getBody();
+    }
 }
