@@ -11,7 +11,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.net.URI;
-import java.net.URL;
 import java.time.LocalDate;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -120,6 +119,26 @@ public class TrackerApplicationTests {
         assertThat(timesheetFound.getUserId()).isEqualTo(timesheetToUpdate.getUserId());
         assertThat(timesheetFound.getDate()).isEqualTo(timesheetToUpdate.getDate());
         assertThat(timesheetFound.getHours()).isEqualTo(timesheetToUpdate.getHours());
+    }
+
+    @Test
+    public void testUpdateTimesheet_notFound() {
+        Timesheet timesheetToUpdate =
+                new Timesheet(
+                        22L,
+                        33L,
+                        LocalDate.of(2019,11,28),
+                        10
+                );
+
+        RequestEntity<Timesheet> requestEntity = RequestEntity
+                .put(URI.create("/timesheets/0"))
+                .body(timesheetToUpdate);
+
+        ResponseEntity timesheetResponseEntity =
+                restTemplate.exchange(requestEntity,Void.class);
+
+        assertThat(timesheetResponseEntity.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND);
     }
 
     private Timesheet createTimesheet(Timesheet timesheetToCreate) {
