@@ -6,9 +6,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.RequestEntity;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import java.net.URI;
+import java.net.URL;
 import java.time.LocalDate;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -72,6 +75,51 @@ public class TrackerApplicationTests {
                         Timesheet.class);
 
         assertThat(timesheetResponseEntity.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND);
+    }
+
+    @Test
+    public void testUpdateTimesheet() {
+        Timesheet timesheetCreated = createTimesheet(
+                new Timesheet(
+                        22L,
+                        33L,
+                        LocalDate.of(2019,11,28),
+                        6
+                )
+        );
+
+        Timesheet timesheetToUpdate =
+                new Timesheet(
+                        22L,
+                        33L,
+                        LocalDate.of(2019,11,28),
+                        10
+                );
+
+        RequestEntity<Timesheet> requestEntity = RequestEntity
+                .put(URI.create("/timesheets/" + timesheetCreated.getId()))
+                .body(timesheetToUpdate);
+
+        ResponseEntity timesheetResponseEntity =
+                restTemplate.exchange(requestEntity,Void.class);
+
+        assertThat(timesheetResponseEntity.getStatusCode()).isEqualTo(HttpStatus.NO_CONTENT);
+
+        ResponseEntity<Timesheet> timesheetResponseEntityFound =
+                restTemplate.getForEntity("/timesheets/" + timesheetCreated.getId(),
+                        Timesheet.class);
+
+
+        assertThat(timesheetResponseEntityFound.getStatusCode()).isEqualTo(HttpStatus.OK);
+        assertThat(timesheetResponseEntityFound.getBody()).isNotNull();
+
+        Timesheet timesheetFound = timesheetResponseEntityFound.getBody();
+
+        assertThat(timesheetFound.getId()).isEqualTo(timesheetCreated.getId());
+        assertThat(timesheetFound.getProjectId()).isEqualTo(timesheetToUpdate.getProjectId());
+        assertThat(timesheetFound.getUserId()).isEqualTo(timesheetToUpdate.getUserId());
+        assertThat(timesheetFound.getDate()).isEqualTo(timesheetToUpdate.getDate());
+        assertThat(timesheetFound.getHours()).isEqualTo(timesheetToUpdate.getHours());
     }
 
     private Timesheet createTimesheet(Timesheet timesheetToCreate) {

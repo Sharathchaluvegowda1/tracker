@@ -30,4 +30,16 @@ public class TimesheetController {
         else
             return ResponseEntity.notFound().build();
     }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<Timesheet> update(@PathVariable long id,
+                                            @RequestBody Timesheet timesheetToUpdate) {
+
+        return ResponseEntity.status(HttpStatus.NO_CONTENT)
+                .body(repository.save(new Timesheet(id,
+                        timesheetToUpdate.getProjectId(),
+                        timesheetToUpdate.getUserId(),
+                        timesheetToUpdate.getDate(),
+                        timesheetToUpdate.getHours())));
+    }
 }

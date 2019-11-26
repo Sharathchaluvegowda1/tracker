@@ -87,4 +87,41 @@ public class TimesheetControllerTests {
 
         assertThat(timesheetResponseEntity.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND);
     }
+
+    @Test
+    public void testUpdateTimesheet() {
+        Timesheet timesheetToUpdate =
+                new Timesheet(2L,
+                        3L,
+                        LocalDate.of(2019,11,28),
+                        6);
+
+        Timesheet timesheetSaved =
+                new Timesheet(1L,
+                        2L,
+                        3L,
+                        LocalDate.of(2019,11,28),
+                        6);
+
+        doReturn(timesheetSaved)
+                .when(repository)
+                .save(new Timesheet(1L,
+                        timesheetToUpdate.getProjectId(),
+                        timesheetToUpdate.getUserId(),
+                        timesheetToUpdate.getDate(),
+                        timesheetToUpdate.getHours()));
+
+        ResponseEntity<Timesheet> timesheetResponseEntity =
+                controller.update(1L, timesheetToUpdate);
+
+        verify(repository)
+                .save(new Timesheet(1L,
+                        timesheetToUpdate.getProjectId(),
+                        timesheetToUpdate.getUserId(),
+                        timesheetToUpdate.getDate(),
+                        timesheetToUpdate.getHours()));
+
+        assertThat(timesheetResponseEntity.getStatusCode()).isEqualTo(HttpStatus.NO_CONTENT);
+        assertThat(timesheetResponseEntity.getBody()).isEqualTo(timesheetSaved);
+    }
 }
